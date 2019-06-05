@@ -60,9 +60,32 @@ $ docker-compose --version
 docker-compose version 1.24.0, build 0aa59064
 ```
 
+### docker-machine
+
+https://docs.docker.com/machine/install-machine/
+
+```
+base=https://github.com/docker/machine/releases/download/v0.16.0 &&
+  curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine &&
+  sudo install /tmp/docker-machine /usr/local/bin/docker-machine
+```
+
+```
+$ docker-machine version
+docker-machine version 0.16.0, build 702c267f
+```
+
+```
+docker-machine create --driver digitalocean --digitalocean-size s-1vcpu-1gb --digitalocean-image ubuntu-18-04-x64 --digitalocean-access-token $DO_TOKEN libro-matriz-digital
+eval $(docker-machine env libro-matriz-digital)
+docker-compose up -d
+docker-machine ip libro-matriz-digital
+```
+
 ## Créditos
 
 Toda la documentación que utilicé para crear este tutorial está linkeada en cada paso. Me inspiré además en las siguientes publicaciones:
 * [un tutorial de CD con Heroku, Travis y Docker](https://medium.com/@javierfernandes/continuous-deployment-con-docker-travis-heroku-c24042fb830b), escrito por el colega docente y programador Javier Fernándes;
 * https://medium.com/containers-101/using-docker-from-maven-and-maven-from-docker-1494238f1cf6
 * http://geekyplatypus.com/packaging-and-serving-your-java-application-with-docker/
+* https://www.digitalocean.com/community/tutorials/how-to-provision-and-manage-remote-docker-hosts-with-docker-machine-on-ubuntu-16-04
