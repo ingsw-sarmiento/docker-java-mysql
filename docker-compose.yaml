@@ -1,0 +1,39 @@
+version: '3'
+services:
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_DATABASE: libroMatrizDigital
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - data:/var/lib/mysql
+    expose:
+      - 3306
+
+  app:
+    image: groupbit/libro-matriz-digital
+    restart: on-failure
+    volumes:
+      - migrations:/var/lib/jetty/migrations
+    ports:
+      - "8080:8080"
+    entrypoint: /wait-for db:3306 -- /docker-entrypoint.sh
+    environment:
+      RDS_HOSTNAME: db
+    depends_on:
+      - db
+
+  flyway:
+    image: boxfuse/flyway:5.2.4-alpine
+    restart: on-failure
+    command: -url=jdbc:mysql://db -schemas=libroMatrizDigital -user=root -password=root -connectRetries=30 migrate
+    volumes:
+      - migrations:/flyway/sql
+    depends_on:
+      - db
+      - app
+
+volumes:
+  migrations:
+  data:
