@@ -17,7 +17,7 @@ services:
     volumes:
       - migrations:/var/lib/jetty/migrations
     ports:
-      - "8080:8080"
+      - "80:8080"
     entrypoint: /wait-for db:3306 -- /docker-entrypoint.sh
     environment:
       RDS_HOSTNAME: db
