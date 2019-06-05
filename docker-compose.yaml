@@ -20,7 +20,8 @@ services:
       - "80:8080"
     entrypoint: /wait-for db:3306 -- /docker-entrypoint.sh
     environment:
-      RDS_HOSTNAME: db
+      DB_HOST: db
+      WICKET_PRODUCTION: 'true'
     depends_on:
       - db
 
