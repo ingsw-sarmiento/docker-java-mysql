@@ -9,6 +9,7 @@ Seguimos las instrucciones que están en [la guía oficial](https://docs.docker.
 
 ```
 sudo usermod -aG docker $USER
+# Luego de esto hay que reiniciar la computadora para que tenga efecto
 ```
 
 Si todo funcionó deberíamos ver algo como esto al ejecutar `docker run hello-world`:
@@ -107,10 +108,20 @@ Luego, para salir ejecutamos <kbd>Ctrl</kbd> + <kbd>C</kbd>. Algunos comandos m�
 ### En Digital Ocean
 
 ```
+# Creamos la máquina, por única vez. Este comando asume que en $DO_TOKEN hay un access token de Digital Ocean y crea la máquina más barata (u$s 5 al mes):
 docker-machine create --driver digitalocean --digitalocean-size s-1vcpu-1gb --digitalocean-image ubuntu-18-04-x64 --digitalocean-access-token $DO_TOKEN libro-matriz-digital
+
+# Configura la consola actual para ejecutar los comandos en Digital Ocean
 eval $(docker-machine env libro-matriz-digital)
+
+# Levanta el servidor y devuelve el control a la consola
 docker-compose up -d
+
+# Nos muestra la IP de la máquina remota
 docker-machine ip libro-matriz-digital
+
+# Vuelve la consola "a la normalidad": los comandos de aquí en adelante se ejecutarán en nuestra máquina. Otra forma es directamente cerrar la consola actual y abrir una nueva
+eval $(docker-machine env -u)
 ```
 
 ## Créditos
