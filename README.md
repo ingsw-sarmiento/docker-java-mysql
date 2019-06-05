@@ -1,6 +1,6 @@
 ## Introducción
 
-En este tutorial veremos cómo instalar [docker](https://www.docker.com/) y [docker-compose](https://docs.docker.com/compose/), y cómo usarlos para poner en producción una aplicación hecha en Java que usa MySQL.
+En este tutorial veremos cómo instalar [docker](https://www.docker.com/), [docker-compose](https://docs.docker.com/compose/) y [docker-machine](https://docs.docker.com/machine/), y cómo usarlos para poner en producción en Digital Ocean una aplicación hecha en Java que usa MySQL.
 
 ## Instalación de Docker
 
@@ -62,13 +62,15 @@ docker-compose version 1.24.0, build 0aa59064
 
 ### docker-machine
 
-https://docs.docker.com/machine/install-machine/
+Una vez que tengamos todo funcionando, necesitaremos una forma de subirlo a nuestro host, en este caso Digital Ocean. Ahí es cuando entra en acción `docker-machine`, utilidad que instalaremos con la [guía oficial](https://docs.docker.com/machine/install-machine/), , que puede resumirse en el siguiente comando:
 
 ```
 base=https://github.com/docker/machine/releases/download/v0.16.0 &&
   curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine &&
   sudo install /tmp/docker-machine /usr/local/bin/docker-machine
 ```
+
+Si todo fue bien, deberíamos ver algo como esto:
 
 ```
 $ docker-machine version
