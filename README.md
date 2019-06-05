@@ -77,6 +77,20 @@ $ docker-machine version
 docker-machine version 0.16.0, build 702c267f
 ```
 
+## Uso
+
+### En la máquina propia
+
+Una vez completada la instalación, ya podemos levantar nuestra aplicación: el [libro matriz](https://github.com/ingsw-sarmiento/libro-matriz-digital) Para esto, previamente ya hemos subido a [Docker Hub](https://hub.docker.com/) la imagen de la aplicación, por lo que lo único necesario es clonar este repositorio y ejecutar esto desde una terminal:
+
+```
+docker-compose up
+```
+
+Para comprobar si funciona, abrimos un navegador y vamos a http://localhost. Debería aparecer nuestra aplicación. :smiley:
+
+### En Digital Ocean
+
 ```
 docker-machine create --driver digitalocean --digitalocean-size s-1vcpu-1gb --digitalocean-image ubuntu-18-04-x64 --digitalocean-access-token $DO_TOKEN libro-matriz-digital
 eval $(docker-machine env libro-matriz-digital)
