@@ -119,8 +119,11 @@ eval $(docker-machine env libro-matriz-digital)
 # Levanta el servidor y devuelve el control a la consola
 docker-compose up -d
 
-# Nos muestra la IP de la máquina remota
-docker-machine ip libro-matriz-digital
+# Nos muestra información sobre las máquinas que tenemos
+docker-machine ls
+
+# Nos permite borrar una máquina
+docker-machine rm libro-matriz-digital
 
 # Vuelve la consola "a la normalidad": los comandos de aquí en adelante se ejecutarán en nuestra máquina. Otra forma es directamente cerrar la consola actual y abrir una nueva
 eval $(docker-machine env -u)
