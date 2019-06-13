@@ -122,6 +122,9 @@ docker-compose up -d
 # Nos muestra información sobre las máquinas que tenemos
 docker-machine ls
 
+# Indica cuál es la máquina activa
+docker-machine active
+
 # Nos permite borrar una máquina
 docker-machine rm libro-matriz-digital
 
