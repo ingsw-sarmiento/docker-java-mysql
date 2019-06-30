@@ -9,7 +9,7 @@ Seguiremos las instrucciones que están en [la guía oficial](https://docs.docke
 
 Lo primero que hay que hacer es agregar el repositorio de Docker e instalar algunas herramientas necesarias para ello:
 
-```console
+```bash
 sudo apt-get update
 
 sudo apt-get install \
@@ -29,7 +29,7 @@ sudo add-apt-repository \
 
 Agregado el repositorio, procederemos a la instalación en sí:
 
-```console
+```bash
 sudo apt-get update
 
 sudo apt-get remove docker docker-engine docker.io containerd runc # elimina cualquier versión anterior de docker
@@ -40,15 +40,15 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io
 
 Finalizada la instalación, agregaremos a nuestro usuario actual al grupo de Docker, para no tener que usar `sudo` a cada rato:
 
-```
+```bash
 sudo usermod -aG docker $USER
 # Luego de esto hay que reiniciar la computadora para que tenga efecto
 ```
 
 Si todo funcionó deberíamos ver algo como esto al ejecutar `docker run hello-world`:
 
-```
-$ docker run hello-world                                                                                                           
+```console
+$ docker run hello-world             
 
 Unable to find image 'hello-world:latest' locally
 latest: Pulling from library/hello-world
