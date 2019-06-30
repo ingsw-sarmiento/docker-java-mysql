@@ -1,9 +1,44 @@
+## Instalación de `docker`, `docker-compose` y `docker-machine`
 
+En este tutorial veremos los pasos necesarios para instalar `docker`, `docker-compose` y `docker-machine` sobre un entorno Linux. Lo escribí probando en mi máquina, que ejecuta Ubuntu 18.04; los pasos podrían ser ligeramente distintos si usás otra distribución (y bastante más distintos si usás Windows o Mac).
 
-## Instalación de Docker
+Lo que se describe aquí no es más que un recorte de las guías oficiales de Docker, traducido al español y comentado para quienes no tienen mucha experiencia en instalar software. En cada paso está el link a la guía oficial, que debería servir de referencia cuando este tutorial quede desactualizado.
 
 ### docker
-Seguimos las instrucciones que están en [la guía oficial](https://docs.docker.com/install/linux/docker-ce/ubuntu/). Finalizada la instalación, agregaremos a nuestro usuario actual al grupo de Docker, para no tener que usar `sudo` a cada rato:
+Seguiremos las instrucciones que están en [la guía oficial](https://docs.docker.com/install/linux/docker-ce/ubuntu/), en su sección [Install using the repository](https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository).
+
+Lo primero que hay que hacer es agregar el repositorio de Docker e instalar algunas herramientas necesarias para ello:
+
+```console
+sudo apt-get update
+
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+```
+
+Agregado el repositorio, procederemos a la instalación en sí:
+
+```console
+sudo apt-get update
+
+sudo apt-get remove docker docker-engine docker.io containerd runc # elimina cualquier versión anterior de docker
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+```
+
+Finalizada la instalación, agregaremos a nuestro usuario actual al grupo de Docker, para no tener que usar `sudo` a cada rato:
 
 ```
 sudo usermod -aG docker $USER
