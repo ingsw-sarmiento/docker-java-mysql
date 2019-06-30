@@ -80,25 +80,25 @@ For more examples and ideas, visit:
 
 ### docker-compose
 
-Para este ejemplo utilizaremos `docker-compose`, una herramienta que nos permite conectar varios contenedores de forma sencilla. Para instalarlo seguiremos también [la guía oficial](https://docs.docker.com/compose/install/), que puede resumirse en los siguientes comandos:
+Instalaremos a continuación `docker-compose`, una herramienta que nos permite conectar varios contenedores de forma sencilla. Para instalarlo seguiremos también [la guía oficial](https://docs.docker.com/compose/install/), que puede resumirse en los siguientes comandos:
 
-```
+```bash
 sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 ```
 
 Si todo fue bien, deberíamos ver algo como esto:
 
-```
+```console
 $ docker-compose --version
 docker-compose version 1.24.0, build 0aa59064
 ```
 
 ### docker-machine
 
-Una vez que tengamos todo funcionando, necesitaremos una forma de subirlo a nuestro host, en este caso Digital Ocean. Ahí es cuando entra en acción `docker-machine`, utilidad que instalaremos con la [guía oficial](https://docs.docker.com/machine/install-machine/), , que puede resumirse en el siguiente comando:
+Una vez que tengamos todo funcionando, necesitaremos una forma sencilla de subirlo a nuestro host, en este caso Digital Ocean. Ahí es cuando entra en acción `docker-machine`, utilidad que instalaremos con la [guía oficial](https://docs.docker.com/machine/install-machine/), , que puede resumirse en el siguiente comando:
 
-```
+```bash
 base=https://github.com/docker/machine/releases/download/v0.16.0 &&
   curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine &&
   sudo install /tmp/docker-machine /usr/local/bin/docker-machine
@@ -106,7 +106,7 @@ base=https://github.com/docker/machine/releases/download/v0.16.0 &&
 
 Si todo fue bien, deberíamos ver algo como esto:
 
-```
+```console
 $ docker-machine version
 docker-machine version 0.16.0, build 702c267f
 ```
