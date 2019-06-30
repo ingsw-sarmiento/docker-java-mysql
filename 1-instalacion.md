@@ -1,6 +1,6 @@
 ## Instalación de `docker`, `docker-compose` y `docker-machine`
 
-En este tutorial veremos los pasos necesarios para instalar `docker`, `docker-compose` y `docker-machine` sobre un entorno Linux. Lo escribí probando en mi máquina, que ejecuta Ubuntu 18.04; los pasos podrían ser ligeramente distintos si usás otra distribución (y bastante más distintos si usás Windows o Mac).
+En esta primera entrega del tutorial "Despliegue de una aplicación web Java sobre Docker" veremos los pasos necesarios para instalar `docker`, `docker-compose` y `docker-machine` sobre un entorno Linux. Lo escribí probando en mi máquina, que ejecuta Ubuntu 18.04; los pasos podrían ser ligeramente distintos si usás otra distribución (y bastante más distintos si usás Windows o Mac).
 
 Lo que se describe aquí no es más que un recorte de las guías oficiales de Docker, traducido al español y comentado para quienes no tienen mucha experiencia en instalar software. En cada paso está el link a la guía oficial, que debería servir de referencia cuando este tutorial quede desactualizado.
 

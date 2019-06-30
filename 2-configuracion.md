@@ -1,26 +1,59 @@
-## Uso
+## Creación de la imagen de la aplicación y del entorno para su ejecución
 
-### En la máquina propia
+Esta es la segunda entrega del tutorial "Despliegue de una aplicación web Java sobre Docker", y aquí veremos cómo configurar nuestra aplicación para que corra en Docker.
 
-Una vez completada la instalación, ya podemos levantar nuestra aplicación: el [libro matriz](https://github.com/ingsw-sarmiento/libro-matriz-digital) Para esto, previamente ya hemos subido a [Docker Hub](https://hub.docker.com/) la imagen de la aplicación, por lo que lo único necesario es seguir estos pasos:
+Los ejemplos están basados en la aplicación [Libro Matriz Digital](https://github.com/groupbit/libro-matriz-digital), elaborada por estudiantes de la Universidad Nacional de Quilmes para el ISFDyT nro. 138 de Capitán Sarmiento, pero puede servir para cualquier aplicación Java que use Hibernate y pueda empaquetarse en un WAR.
 
-1. Clonar este repositorio.
-1. Abrir una terminal dentro de este repositorio.
-1. Ejecutar `docker-compose up` y esperar a que descargue todo - puede tardar un raaaato largo la primera vez. :hourglass:
+### Cambios en el código Java
 
-En formato copiar-pegar sería así:
+Lo primero que debemos hacer es preparar la aplicación para que poder configurarla según el entorno de ejecución, a través de variables de entorno. En nuestro ejemplo, queremos configurar el acceso a la base de datos y el modo de ejecución de Wicket (desarrollo o producción).
 
+Para evitar trabajar con los valores nulos que devuelve `System.getenv` (lo que Java provee para acceder a las variables de entorno), creé esta pequeña clase que aprovecha el [Optional](https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html) de Java 8:
+
+```java
+public class Env {
+	public static String getOrElse(String key, String defaultValue) {
+		return read(key).orElse(defaultValue);
+	}
+
+	public static boolean isPresent(String key) {
+		return read(key).isPresent();
+	}
+
+	private static Optional<String> read(String key) {
+		return Optional.ofNullable(System.getenv(key));
+	}
+}
 ```
-git clone https://github.com/ingsw-sarmiento/docker-java-mysql.git
-cd docker-java-mysql
-docker-compose up
+
+En el caso de la base de datos, creé cuatro variables: `DB_HOST`, `DB_PORT`, `DB_USERNAME` y `DB_PASSWORD`, dejando el nombre de la base de datos fijo en `libroMatrizDigital`. Además, dejé valores por defecto que nos sirven para no tener que configurar las variables en el ambiente de desarrollo.
+
+El método que crea el `DataSource` quedó así:
+
+```java
+public DataSource dataSource() {
+  DriverManagerDataSource dataSource = new DriverManagerDataSource();
+  dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+
+  String host = Env.getOrElse("DB_HOST", "localhost");
+  String port = Env.getOrElse("DB_PORT", "3306");
+  dataSource.setUrl("jdbc:mysql://" + host + ":" + port + "/libroMatrizDigital");
+  dataSource.setUsername(Env.getOrElse("DB_USERNAME", "root"));
+  dataSource.setPassword(Env.getOrElse("DB_PASSWORD", "root"));
+
+  return dataSource;
+}
 ```
 
-Para comprobar si funciona, abrimos un navegador y vamos a http://localhost. Debería aparecer nuestra aplicación. :smiley:
+Para el modo de ejecución de Wicket elegí crear una variable `WICKET_PRODUCTION`, cuya simple presencia activa el modo productivo. En Java, fue necesario agregar el siguiente método a nuestra `Application`:
 
-Luego, para salir ejecutamos <kbd>Ctrl</kbd> + <kbd>C</kbd>. Algunos comandos más de `docker-compose`:
+```java
+@Override
+public RuntimeConfigurationType getConfigurationType() {
+  return Env.isPresent("WICKET_PRODUCTION")
+    ? RuntimeConfigurationType.DEPLOYMENT
+    : RuntimeConfigurationType.DEVELOPMENT;
+}
+```
 
-* `docker-compose up db`: levanta únicamente un servicio, `db` en este caso. Si tiene dependencias, también las levantará previamente;
-* `docker-compose up -d`: igual que `up`, pero devuelve el control de la consola;
-* `docker-compose down`: baja todos los contenedores y los borra;
-* `docker-compose down -v`: igual que `down`, pero borra también los volúmenes (en este ejemplo, la base de datos y la carpeta de migraciones).
+¡Y listo! Preparada nuestra aplicación para ser configurada a través de variables de entorno. Esto nos sirve para Docker, pero también se podrían configurar a través de Maven o desde la misma consola.

@@ -1,4 +1,4 @@
-# Despliegue de una app web Java sobre Docker
+# Despliegue de una aplicación web Java sobre Docker
 
 ## Introducción
 
