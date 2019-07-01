@@ -57,3 +57,40 @@ public RuntimeConfigurationType getConfigurationType() {
 ```
 
 ¡Y listo! Preparada nuestra aplicación para ser configurada a través de variables de entorno. Esto nos sirve para Docker, pero también se podrían configurar a través de Maven o desde la misma consola.
+
+### Creación de la imagen Docker
+
+Como el objetivo final es publicar nuestra aplicación en un entorno productivo, vamos a crear una imagen Docker que la contenga. La imagen contendrá solamente lo necesario para correr la aplicación Java, la base de datos y las migraciones se ejecutarán en otros contenedores.
+
+Partiendo de una imagen base de Jetty, lo mínimo que necesitamos para que crear nuestra imagen es copiar el WAR al directorio correspondiente. Nuestro `Dockerfile` inicial quedaría así:
+
+```docker
+FROM jetty:9-jre8-alpine
+WORKDIR $JETTY_BASE
+COPY target/libro-matriz-digital.war webapps/ROOT.war
+```
+
+¡Felicitaciones! Ya tenemos una imagen para ejecutar nuestra aplicación. Si tenemos MariaDB (o MySQL) corriendo con los valores por defecto que espera nuestra aplicación, podríamos levantarla ejecutando lo siguiente:
+
+```
+mvn package
+docker build mi-app-java .
+docker run mi-app-java
+```
+
+Para que nos sirva para un entorno productivo, nos faltan dos tareas más:
+* crear una carpeta para contener las migraciones, que serán luego ejecutadas por otro contenedor con [FlywayDB](https://flywaydb.org/);
+* copiar el script [wait-for](https://github.com/eficode/wait-for), que utilizaremos para esperar a que inicie la base de datos.
+
+Esto lo logramos modificando el `Dockerfile` de la siguiente manera:
+
+```docker
+FROM jetty:9-jre8-alpine
+WORKDIR $JETTY_BASE
+RUN mkdir migrations
+COPY scripts/wait-for /wait-for
+COPY src/main/resources/db/migration/* migrations/
+COPY target/libro-matriz-digital.war webapps/ROOT.war
+```
+
+**Ojo:** el orden de los comandos no es casual, está pensado para optimizar el tiempo de `build`: Docker construye las imágenes por capa, y ante modificaciones recrea aquellas partes que cambiaron _y todas las que le siguen_. Por esto, conviene ordenar los comandos según la probabilidad de que cambien; en este caso lo que más seguido cambiará es el WAR y por eso está último, seguido por las migraciones. 
